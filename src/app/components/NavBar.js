@@ -1,5 +1,4 @@
 "use client"; // Add this line to make it a Client Component
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaWhatsapp } from 'react-icons/fa'; // Import WhatsApp Icon
@@ -9,10 +8,6 @@ import { useState } from 'react';
 const NavBar = () => {
   const [dropdownENOpen, setDropdownENOpen] = useState(false);
   const [dropdownFollowOpen, setDropdownFollowOpen] = useState(false);
-//   const router = useRouter();
-const router = typeof window !== 'undefined' ? useRouter() : null;
-  // Helper function to determine if the route is active
-  const isActive = (pathname) => router?.pathname === pathname;
   return (
     <nav className="sticky top-0 bg-black text-white p-4 border-b border-gray-700 h-18">
       <div className="container mx-auto flex justify-between items-center">
