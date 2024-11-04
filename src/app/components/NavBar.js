@@ -44,13 +44,19 @@ const NavBar = () => {
                 </Link>
           </li>
           <li>
-            <Link href="/rent">Rent</Link>
+            <Link href="/rent">Sell</Link>
           </li>
           <li>
-            <Link href="/villas">Villas</Link>
+            <Link href="/villas">Off Plan</Link>
           </li>
           <li>
-            <Link href="/services">Services</Link>
+            <Link href="/catalog">Catalog</Link>
+          </li>
+          <li>
+            <Link href="/blog">Blogs</Link>
+          </li>
+          <li>
+            <Link href="/about">About</Link>
           </li>
           <li>
             <Link href="/contact">Contact</Link>

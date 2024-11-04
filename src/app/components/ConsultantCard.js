@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useState,useEffect } from 'react';
 import { FaPhoneAlt, FaWhatsapp, FaEnvelope, FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaVk, FaXTwitter } from 'react-icons/fa';
 import axios from 'axios'
+import Link from 'next/link';
 const ConsultantCard = () => {
   const [socialLinks, setSocialLinks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,9 +50,7 @@ const ConsultantCard = () => {
           </a>
         </button>
         <button className="border border-gray-500 w-1/2 text-center py-2 mx-1 rounded-lg hover:bg-gray-700">
-        <a href={socialLinks?.Mail} target="_blank">
-          INQUIRY
-          </a>
+          <Link href="/contact">INQUIRY</Link>
         </button>
       </div>
 
@@ -71,7 +70,7 @@ const ConsultantCard = () => {
       <div className="text-center border-t border-gray-700 pt-4">
         <p className="mb-4 text-gray-400">Share</p>
         <div className="flex justify-center space-x-4 text-2xl">
-        <a href={socialLinks?.Mail} target="_blank">
+        <a href={`mailto:${socialLinks?.Mail}`} target="_blank">
           <FaEnvelope className="hover:text-gray-300 cursor-pointer" />
           </a>
           <a href={socialLinks?.Facebook} target="_blank">

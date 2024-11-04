@@ -3,10 +3,10 @@ import Footer from '../../components/Footer';
 const HouseDetail = () => {
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-black">
       {/* Navbar */}
-      <div className="fixed top-0 w-full bg-white shadow-lg z-10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="fixed top-0 w-full bg-black shadow-lg z-10">
+        {/* <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">Real Estate</h1>
           <nav>
             <ul className="flex space-x-4">
@@ -14,7 +14,7 @@ const HouseDetail = () => {
               <li className="hover:text-blue-500"><a href="/contact">Contact</a></li>
             </ul>
           </nav>
-        </div>
+        </div> */}
       </div>
 
       {/* Main content */}
@@ -32,16 +32,16 @@ const HouseDetail = () => {
           {/* House Details */}
           <div className="flex flex-col justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-gray-800">
+              <h2 className="text-3xl font-bold text-gray-400">
                 Luxury Villa in Downtown Dubai
               </h2>
-              <p className="mt-3 text-lg text-gray-600">
+              <p className="mt-3 text-lg text-gray-500">
                 Beautiful 4-bedroom villa with private pool, garden, and panoramic views of the Dubai skyline.
               </p>
 
               <div className="mt-5">
-                <h4 className="text-xl font-bold text-gray-800">Property Details</h4>
-                <ul className="mt-3 text-gray-600">
+                <h4 className="text-xl font-bold text-gray-400">Property Details</h4>
+                <ul className="mt-3 text-gray-500">
                   <li>Location: Downtown Dubai</li>
                   <li>Price: AED 5,000,000</li>
                   <li>Area: 3,500 sqft</li>
@@ -53,8 +53,8 @@ const HouseDetail = () => {
               </div>
 
               <div className="mt-6">
-                <h4 className="text-xl font-bold text-gray-800">Description</h4>
-                <p className="mt-2 text-gray-600">
+                <h4 className="text-xl font-bold text-gray-400">Description</h4>
+                <p className="mt-2 text-gray-500">
                   This villa offers luxury living in the heart of Dubai, with spacious living areas, modern design, and world-class amenities. Perfect for families who value privacy and high-end lifestyle.
                 </p>
               </div>
