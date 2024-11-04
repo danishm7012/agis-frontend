@@ -1,14 +1,15 @@
 "use client"; // Add this line to make it a Client Component
 // import React from 'react'
 import Image from 'next/image';
-
-const RealEstateCard = () => {
+import Link from 'next/link'; // Import next/link
+const RealEstateCard = ({idRoute,image,data,key}) => {
   return (
+    <Link href={idRoute} key={key}>
     <div className="bg-black text-white rounded-lg overflow-hidden w-72 m-5 shadow-lg">
       {/* Image Section */}
       <div className="relative">
         <Image
-          src="https://img.freepik.com/premium-photo/beautiful-modern-house-poland-with-white-walls-black-roof-large-windows-flowers_1097265-114073.jpg" // Replace with your own image path
+          src={data?.Images ? data?.Images[0]?.url : image} // Replace with your own image path
           alt="The Address Sky View Tower"
           width={500}
           height={300}
@@ -22,21 +23,21 @@ const RealEstateCard = () => {
 
       {/* Property Details */}
       <div className="p-4">
-        <h2 className="text-xl mb-2 text-white">The Address Sky View Tower 2</h2>
+        <h2 className="text-xl mb-2 text-white">{data?.title}</h2>
         <p className="flex items-center text-gray-400 text-sm mb-1">
-          📍 The Address Sky View
+          📍 {data?.location}
         </p>
-        <p className="text-sm text-gray-400 mb-3">Apartment</p>
+        <p className="text-sm text-gray-400 mb-3">{data?.type}</p>
 
         {/* Property Features */}
         <div className="flex gap-3 mb-4 text-sm text-gray-400">
-          <span>🛏️ 2</span>
-          <span>🛁 3</span>
-          <span>📏 1700 sq.ft</span>
+          <span>🛏️ &nbsp;{data?.noOfBed}</span>
+          <span>🛁 &nbsp; {data?.noOfBath}</span>
+          <span>📏 &nbsp; {data?.areaSize}  sq.ft</span>
         </div>
 
         {/* Price */}
-        <div className="text-teal-400 text-2xl">AED 7,300,000</div>
+        <div className="text-teal-400 text-2xl">AED {data?.price}</div>
       </div>
 
       {/* Footer Icons */}
@@ -46,6 +47,7 @@ const RealEstateCard = () => {
         <button className="text-gray-400 text-lg hover:text-white">💬</button>
       </div>
     </div>
+    </Link>
   );
 };
 

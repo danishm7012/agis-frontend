@@ -46,9 +46,9 @@ const PropertyTypeDropdown = () => {
         >
           <div
             className="px-4 py-2 hover:bg-gray-800 cursor-pointer"
-            onClick={() => handleOptionClick('Appartment')}
+            onClick={() => handleOptionClick('Buy')}
           >
-            Appartment
+            Buy
           </div>
           <div
             className="px-4 py-2 hover:bg-gray-800 cursor-pointer"
@@ -58,9 +58,9 @@ const PropertyTypeDropdown = () => {
           </div>
           <div
             className="px-4 py-2 hover:bg-gray-800 cursor-pointer"
-            onClick={() => handleOptionClick('PentHouses')}
+            onClick={() => handleOptionClick('Rent')}
           >
-            PentHouses
+            Rent
           </div>
         </div>
       )}

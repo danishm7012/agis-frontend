@@ -2,19 +2,36 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaWhatsapp } from 'react-icons/fa'; // Import WhatsApp Icon
-import { useState } from 'react';
-
+import { useState,useEffect } from 'react';
+import axios from 'axios'
 
 const NavBar = () => {
   const [dropdownENOpen, setDropdownENOpen] = useState(false);
   const [dropdownFollowOpen, setDropdownFollowOpen] = useState(false);
+  const [socialLinks, setSocialLinks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchSocialLinks = async () => {
+      try {
+        const response = await axios.get('https://test-cms-updated.onrender.com/api/social-link');
+        setSocialLinks(response.data?.data); // Assuming response data is in the correct format
+      } catch (err) {
+        setError(err.message || "An error occurred while fetching data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSocialLinks();
+  }, []);
   return (
-    <nav className="sticky top-0 bg-black text-white p-4 border-b border-gray-700 h-18">
+    <nav className="fixed top-0 w-screen z-50 bg-black text-white p-4 border-b border-gray-700 h-18">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left Side: Logo */}
         <div className="text-3xl font-bold">
-          <Link href="/">
-          <Image src="https://fnst.axflare.com/assets/public/svg/logo/logo.svg" alt="AX Logo" width={100} height={100} />
+          <Link href="/buy">
+          <Image src='/images/agisLogo.png' alt="AX Logo" width={100} height={100} />
           </Link>
         </div>
 
@@ -22,12 +39,12 @@ const NavBar = () => {
         <div className="flex space-x-6 h-full">
         <ul className="flex space-x-6">
           <li>
-            <Link href="/apartments">
-                Apartments
+            <Link href="/buy">
+                Buy
                 </Link>
           </li>
           <li>
-            <Link href="/penthouses">Penthouses</Link>
+            <Link href="/rent">Rent</Link>
           </li>
           <li>
             <Link href="/villas">Villas</Link>
@@ -73,17 +90,17 @@ const NavBar = () => {
                    onMouseEnter={() => setDropdownFollowOpen(true)} // Keep it open when hovering on dropdown
                    onMouseLeave={() => setDropdownFollowOpen(false)} // Close when leaving the dropdown
               >
-                <Link href="https://facebook.com" target="_blank" className="block px-4 py-2 hover:bg-gray-200">Facebook</Link>
-                <Link href="https://instagram.com" target="_blank" className="block px-4 py-2 hover:bg-gray-200">Instagram</Link>
-                <Link href="https://linkedin.com" target="_blank" className="block px-4 py-2 hover:bg-gray-200">LinkedIn</Link>
-                <Link href="https://twitter.com" target="_blank" className="block px-4 py-2 hover:bg-gray-200">Twitter</Link>
+                <Link href={socialLinks?.Facebook} target="_blank" className="block px-4 py-2 hover:bg-gray-200">Facebook</Link>
+                <Link href={socialLinks?.Instagram} target="_blank" className="block px-4 py-2 hover:bg-gray-200">Instagram</Link>
+                <Link href={socialLinks?.LinkedIn} target="_blank" className="block px-4 py-2 hover:bg-gray-200">LinkedIn</Link>
+                <Link href={socialLinks?.Twitter} target="_blank" className="block px-4 py-2 hover:bg-gray-200">Twitter</Link>
               </div>
             )}
           </li>
 
           {/* WhatsApp Icon */}
           <li>
-            <a href="https://wa.me/123456789" target="_blank">
+            <a href={`https://wa.me/${socialLinks?.Whatsapp}`} target="_blank">
               <FaWhatsapp size={24} color="#FFD700"/>
             </a>
           </li>
