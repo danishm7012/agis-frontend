@@ -1,62 +1,102 @@
-import React from 'react';
+'use client'
+import React, {useState,useEffect} from 'react';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
 import Footer from '../../components/Footer';
+import { useParams } from 'next/navigation'
 const HouseDetail = () => {
+  const params = useParams();
+  const {id} = params
+  const [propertyData, setPropertyData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`https://test-cms-updated.onrender.com/api/properties/${id}?populate=*`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setPropertyData(data?.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchData();
+  }, [id]);
   return (
     <div className="min-h-screen bg-black">
       {/* Navbar */}
-      <div className="fixed top-0 w-full bg-black shadow-lg z-10">
-        {/* <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Real Estate</h1>
-          <nav>
-            <ul className="flex space-x-4">
-              <li className="hover:text-blue-500"><a href="/">Home</a></li>
-              <li className="hover:text-blue-500"><a href="/contact">Contact</a></li>
-            </ul>
-          </nav>
-        </div> */}
-      </div>
+      <div className="fixed top-0 w-full bg-black shadow-lg z-10"></div>
 
       {/* Main content */}
+      {loading ?  <div className="container mx-auto px-4 py-20"> <p className="mt-3 text-lg text-white">Loading...</p> </div> :
       <div className="container mx-auto px-4 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* House Image */}
+          {/* House Carousel */}
           <div className="relative">
+            <Carousel
+              showArrows={true}
+              showThumbs={false}
+              infiniteLoop={true}
+              autoPlay={true}
+              interval={2000}
+              className="rounded-lg shadow-lg"
+              
+            >
+             {propertyData?.Images && propertyData?.Images?.length > 0 ?  
+          propertyData?.Images.map((data,index) => 
+          <div key={index}>
+             <img
+             className="w-full h-auto rounded-lg shadow-lg"
+             src={data?.url}  // Replace with actual image
+             alt="House"
+           />
+             </div>
+          )
+            :  <div>
             <img
-              className="w-full h-auto rounded-lg shadow-lg"
-              src="https://img.freepik.com/free-photo/3d-rendering-isometric-house_23-2150727936.jpg?t=st=1728196670~exp=1728200270~hmac=f9a3936cc5d1118e5d25ba1919b115536317d2beae267933b63aa629b0d0a777&w=1380"  // Replace with actual image
-              alt="House"
-            />
+            className="w-full h-auto rounded-lg shadow-lg"
+            src="https://img.freepik.com/free-photo/3d-rendering-house-model_23-2150799725.jpg?t=st=1728196492~exp=1728200092~hmac=6f0385e97ea3f0a0596fb30f53a9c84f7f39e9c9df2c58c05590ce805ab45875&w=1380"  // Replace with actual image
+            alt="House"
+          />
+            </div>}
+              {/* Add more images as needed */}
+            </Carousel>
           </div>
 
           {/* House Details */}
           <div className="flex flex-col justify-between">
             <div>
               <h2 className="text-3xl font-bold text-gray-400">
-                Luxury Villa in Downtown Dubai
+                {propertyData?.title}
               </h2>
               <p className="mt-3 text-lg text-gray-500">
-                Beautiful 4-bedroom villa with private pool, garden, and panoramic views of the Dubai skyline.
+                Beautiful {propertyData?.noOfBed}-bedroom {propertyData?.type}.
               </p>
 
               <div className="mt-5">
                 <h4 className="text-xl font-bold text-gray-400">Property Details</h4>
                 <ul className="mt-3 text-gray-500">
-                  <li>Location: Downtown Dubai</li>
-                  <li>Price: AED 5,000,000</li>
-                  <li>Area: 3,500 sqft</li>
-                  <li>Bedrooms: 4</li>
-                  <li>Bathrooms: 5</li>
+                  <li>Location: {propertyData?.location}</li>
+                  <li>Price: AED {propertyData?.price}</li>
+                  <li>Area: {propertyData?.areaSize} sqft</li>
+                  <li>Bedrooms: {propertyData?.noOfBed}</li>
+                  <li>Bathrooms: {propertyData?.noOfBath}</li>
                   <li>Furnishing: Fully Furnished</li>
-                  <li>Parking: 2 Car Spaces</li>
+                  <li>Parking: {propertyData?.noOfParking} Car Spaces</li>
                 </ul>
               </div>
 
               <div className="mt-6">
                 <h4 className="text-xl font-bold text-gray-400">Description</h4>
-                <p className="mt-2 text-gray-500">
-                  This villa offers luxury living in the heart of Dubai, with spacious living areas, modern design, and world-class amenities. Perfect for families who value privacy and high-end lifestyle.
-                </p>
+               {propertyData?.Description?.map((data,index) => 
+                <p key={index} className="mt-2 text-gray-500">
+                  {data?.children[0]?.text}
+                </p> )}
               </div>
             </div>
 
@@ -72,13 +112,7 @@ const HouseDetail = () => {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      {/* <div className="bg-gray-900 text-white py-8 mt-10">
-        <div className="container mx-auto px-4">
-          <p className="text-center">&copy; 2024 Real Estate. All rights reserved.</p>
-        </div>
-      </div> */}
+}
       <Footer />
     </div>
   );

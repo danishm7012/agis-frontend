@@ -1,161 +1,122 @@
 "use client"; // Add this line to make it a Client Component
 import Footer from '../components/Footer';
-import { useState,useEffect } from 'react';
-import PropertyTypeDropdown from '../components/PropertyDropDown'
-import BedroomsSelector from '../components/BedRoomsSelector'
-import AreaRangeSelector from '../components/AreaRangeSelector'
+import { useState, useEffect } from 'react';
+import PropertyTypeDropdown from '../components/PropertyDropDown';
+import BedroomsSelector from '../components/BedRoomsSelector';
+import AreaRangeSelector from '../components/AreaRangeSelector';
 import RealEstateCard from '../components/RealEstateCard';
 import ConsultantCard from '../components/ConsultantCard';
 import ConsultationForm from '../components/ConsultationForm';
 import FourColumnLayout from '../components/FourTextColumn';
-import axios from 'axios'
-const Buy = () => {
+import axios from 'axios';
 
+const Buy = () => {
   const [propertiesList, setPropertiesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await axios.get('https://test-cms-updated.onrender.com/api/properties?pagination[page]=1&pagination[pageSize]=10&populate=*');
-        setPropertiesList(response?.data?.data); // Assuming response data is in the correct format
-        
-      } catch (err) {
-        setError(err.message || "An error occurred while fetching data.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
 
+  const fetchProperties = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `https://test-cms-updated.onrender.com/api/properties?pagination[page]=${page}&pagination[pageSize]=10&populate=*`
+      );
+      setPropertiesList(prevList => [...prevList, ...response?.data?.data]);
+      setHasNextPage(response?.data?.meta?.pagination?.page < response?.data?.meta?.pagination?.pageCount);
+    } catch (err) {
+      setError(err.message || "An error occurred while fetching data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchProperties();
-  }, []);
+  }, [page]);
+
+  const loadMoreProperties = () => {
+    if (hasNextPage) {
+      setPage(prevPage => prevPage + 1);
+    }
+  };
+
   return (
-    <div className='mt-14'>
-      <div className="p-10 bg-black text-white">
-        <p className="text-lg font-bold" style={{color:'gray'}}>Properties For Sale In Dubai</p>
-        <h1 className="mt-5 text-3xl text-gray-300" style={{textAlign:'center'}}>{`Properties For Sale in dubai`.toUpperCase()}</h1>
-        <div className='pt-6' style={{display:'flex',flexDirection:'row'}}>
-          <div style={{display:'flex',flex:0.3,flexDirection:'column',}}>
-            <h5 className='text-gray-500'>Real Estate Category</h5>
-            <div style={{display:'flex',flexDirection:'row',marginTop:6}}>
-            <div className='border border-gray-700' style={{display:'flex',height:42,width:120,justifyContent:'center',alignItems:'center'}}>
-              <h6>All</h6>
-            </div>
-            <div className='border border-gray-700' style={{display:'flex',height:42,width:120,justifyContent:'center',alignItems:'center'}}>
-              <h6>Primary</h6>
-            </div>
-            <div className='border border-gray-700' style={{display:'flex',height:42,width:120,justifyContent:'center',alignItems:'center'}}>
-              <h6>Secondary</h6>
-            </div>
+    <div className="mt-14">
+      <div className="p-5 md:p-10 bg-black text-white">
+        <p className="text-lg font-bold text-gray-400">Properties For Sale In Dubai</p>
+        <h1 className="mt-3 text-2xl md:text-3xl text-gray-300 text-center">
+          {`Properties For Sale in Dubai`.toUpperCase()}
+        </h1>
+
+        <div className="pt-6 flex flex-col md:flex-row gap-4 md:gap-6">
+          <div className="flex flex-col w-full md:w-1/4">
+            <h5 className="text-gray-500">Real Estate Category</h5>
+            <div className="flex flex-wrap gap-3 mt-3">
+              <div className="border border-gray-700 flex items-center justify-center w-full md:w-24 h-10">
+                <h6>All</h6>
+              </div>
+              <div className="border border-gray-700 flex items-center justify-center w-full md:w-24 h-10">
+                <h6>Primary</h6>
+              </div>
+              <div className="border border-gray-700 flex items-center justify-center w-full md:w-24 h-10">
+                <h6>Secondary</h6>
+              </div>
             </div>
           </div>
-<PropertyTypeDropdown/>
-          {/* <div style={{marginLeft:20}}>
-            <h5 className='text-gray-500'>Bedrooms</h5>
-            <div style={{display:'flex'}}>
-              <div className='border border-gray-700' style={{
-                 display:'flex',
-                 justifyContent:'center',
-                 alignItems:'center',
-                 textAlign:'center',
-                 height: 42,
-                 width: 42,
-                 marginTop: 6,
 
-              }}>
-1
-              </div>
-              <div className='border border-gray-700' style={{
-                 display:'flex',
-                 justifyContent:'center',
-                 alignItems:'center',
-                 textAlign:'center',
-                 height: 42,
-                 width: 42,
-                 marginTop: 6,
+          <PropertyTypeDropdown className="w-full md:w-1/4" />
+          <BedroomsSelector className="w-full md:w-1/4" />
+          <AreaRangeSelector className="w-full md:w-1/4" title="Area" unite="sqm" mValue={0} mxValue={100} />
+          <AreaRangeSelector className="w-full md:w-1/4" title="Currency" unite="AE" mValue={1000} mxValue={100000} />
+        </div>
 
-              }}>
-2
-              </div>
-              <div className='border border-gray-700' style={{
-                 display:'flex',
-                 justifyContent:'center',
-                 alignItems:'center',
-                 textAlign:'center',
-                 height: 42,
-                 width: 42,
-                 marginTop: 6,
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+          <div className="col-span-3 flex flex-wrap gap-4">
+            {loading && page === 1 ? (
+              <div className="text-white">Loading...</div>
+            ) : propertiesList.length > 0 ? (
+              propertiesList.map((data, index) => (
+                <RealEstateCard
+                  idRoute={`/buy/${data?.documentId}`}
+                  data={data}
+                  image="https://img.freepik.com/premium-photo/villa-design-dubai_1015255-107296.jpg?w=826"
+                  key={index}
+                />
+              ))
+            ) : (
+              <div>Sorry, no property found at the moment. Please check your internet connection and try again!</div>
+            )}
+          </div>
 
-              }}>
-3
-              </div>
-              <div className='border border-gray-700' style={{
-                 display:'flex',
-                 justifyContent:'center',
-                 alignItems:'center',
-                 textAlign:'center',
-                 height: 42,
-                 width: 42,
-                 marginTop: 6,
-
-              }}>
-4
-              </div>
-              <div className='border border-gray-700' style={{
-                 display:'flex',
-                 justifyContent:'center',
-                 alignItems:'center',
-                 textAlign:'center',
-                 height: 42,
-                 width: 42,
-                 marginTop: 6,
-
-              }}>
-5+
-              </div>
+          <div className="col-span-1">
+            <div className="sticky top-14 md:top-0">
+              <ConsultantCard />
             </div>
-          </div> */}
-<BedroomsSelector/>
-          {/* <div>
-            <h5 className='text-gray-500'>Area</h5>
-          </div> */}
-<AreaRangeSelector title={"Area"} unite={'sqm'} mValue={0} mxValue={100}/>
+          </div>
+        </div>
 
-<AreaRangeSelector title={"Currency"} unite = {"AE"} mValue={1000} mxValue={100000}/>
-          {/* <div>
-            <h5 className='text-gray-500'>Currency</h5>
-          </div> */}
+        {hasNextPage && !loading && (
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={loadMoreProperties}
+              className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 w-full md:w-auto"
+            >
+              Load More
+            </button>
+          </div>
+        )}
+        
+        {loading && page > 1 && <div className="text-white mt-4">Loading more properties...</div>}
+
+        <div className="h-[60vh] flex items-center justify-center mt-10">
+          <ConsultationForm />
         </div>
-        <div className="grid grid-cols-4">
-  {/* Real estate column */}
-  <div className="col-span-3" style={{display:'flex',flex:1, flexDirection:'row',flexWrap:'wrap'}}>
-    { loading ? 
-    <div className='text-white' >
-      loading...
-      </div>
-    
-    : propertiesList?.length > 0 ? propertiesList?.map((data,index) => ( 
-      <RealEstateCard idRoute={'/buy/123'} data = {data} image = {"https://img.freepik.com/premium-photo/villa-design-dubai_1015255-107296.jpg?w=826"} key={index}/>
-    ))
-      
-      :
-      <div>
-        sorry no property found at the moment please check your internet connection and try again!
+
+        <div>
+          <FourColumnLayout />
         </div>
-      }
-   
-  </div>
-  {/* Consultant column with sticky behavior */}
-  <div className="col-span-1 sticky top-0">
-    <ConsultantCard />
-  </div>
-</div>
-<div className="h-[60vh] flex items-center justify-center">
-  <ConsultationForm />
-</div>
-    <div>
-      <FourColumnLayout/>
-      </div>   
       </div>
       <Footer />
     </div>

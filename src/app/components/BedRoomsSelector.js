@@ -18,18 +18,18 @@ const BedroomsMultiSelector = () => {
   };
 
   return (
-    <div style={{ marginLeft: 20 }}>
-      <h5 className="text-gray-500">Bedrooms</h5>
-      <div className="flex  mt-2"> {/* Flex with space between boxes */}
+    <div className="ml-4 sm:ml-4 md:ml-4 lg:ml-4 mt-4 md:mt-0">
+      <h5 className="text-gray-500 text-sm sm:text-base md:text-lg">Bedrooms</h5>
+      <div className="flex flex-wrap mt-2 justify-center md:justify-start"> {/* Flex with space between boxes */}
         {options.map((option) => (
           <div
             key={option}
-            className={`border border-gray-700 flex justify-center items-center text-center h-10 w-10 cursor-pointer ${
-              selectedOptions.includes(option) ? 'bg-yellow-600 text-white' : 'transparent'
+            className={`border border-gray-700 flex justify-center items-center text-center h-10 w-10 sm:h-10 sm:w-10 md:h-10 md:w-10 cursor-pointer m-1 ${
+              selectedOptions.includes(option) ? 'bg-yellow-600 text-white' : 'bg-transparent'
             }`} 
             onClick={() => handleSelect(option)} // Handle click to select/deselect the box
           >
-            {option}
+            <span className="text-sm sm:text-base md:text-lg">{option}</span> {/* Responsive text size */}
           </div>
         ))}
       </div>
